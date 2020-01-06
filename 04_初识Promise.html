@@ -19,21 +19,27 @@
 
 //Promise不是回调函数，但是new Promise时传递进去的函数是回调函数，它是同步的回调
 const p1 = new Promise((resolve, reject) => { //Promise的执行器函数(excutor),是同步的回调函数
+	/* 
+		Promise实例，可以看成一个“状态机”
+			1.Promise实例内部有三种状态：初始化(pending)、成功状态(resolved)、失败状态(rejected)
+			2.调用resolve，将初始化的pending状态改为resolved，同时指定成功的value。
+			3.调用reject，将初始化的pending状态改为rejected，同时指定失败的reason。
+ 	*/
 	console.log('new Promise传递进去的回调函数');
 	//在执行器函数中，开启异步任务
   setTimeout(() => {
-    resolve('foo');
-  },1000);
+    reject('atguigu');
+    resolve('我又成功了'); //无效代码
+    reject('我又失败了，你说气不气人');//无效的代码
+  },2000);
 });
 
-p1.then(function(value) { //p1调用了，Promise原型对象上的then方法
-  console.log(value);
-});
-
-//console.log(promise1);
-
-
-a.b()
+p1.then( //p1调用了，Promise原型对象上的then方法,then不是回调函数
+	value => {console.log('成功的回调',value)}, //成功的回调(onResolved)---异步的回调
+	reason => {console.log('失败的回调',reason)} //失败的回调(onRejected)---异步的调用
+);
+console.log('主线程');
+console.log(p1);
 
 
 </script>
