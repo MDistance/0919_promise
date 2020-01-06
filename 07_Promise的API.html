@@ -43,6 +43,7 @@
 	
 
 	<script type="text/javascript" >
+		//Promise.prototype.catch方法
 		/* let p1 = new Promise((resolve,reject)=>{
 			console.log('-----excutor----');
 			setTimeout(()=>{
@@ -54,36 +55,36 @@
 				}
 			},1000)
 		})
-
 		p1.catch(
 			reason => {console.log(reason)},
 		)
 		console.log('主线程'); */
 
+		/****************************************************************************/
+
+		//Promise.resolve方法和Promise.reject方法
 		/* let p1 = new Promise((resolve,reject)=>{
 			resolve(1)
 		}) */
 		/* let p1 = Promise.resolve(1) //用于快速创建一个状态为resolved的Promise实例，同时指定value
 		let p2 = Promise.reject(2) //用于快速创建一个状态为rejected的Promise实例，同时指定reason
-		
 		p2.catch(
 			reason => console.log(reason)
 		) */
 
+		/****************************************************************************/
 
-		
+		//准备一些Promise实例，供测试使用
 		let p1 = new Promise((resolve,reject)=>{
 			setTimeout(()=>{
 				resolve('p1成功了')
 			},1000)
 		})
-
 		let p2 = new Promise((resolve,reject)=>{
 			setTimeout(()=>{
 				reject('p2失败了')
 			},7000)
 		})
-
 		let p3 = Promise.reject('p3失败了')
 		let p4 = Promise.reject('p4失败了')
 
@@ -99,6 +100,8 @@
 			reason => console.log('race方法返回的新Promise实例失败了',reason)
 		) */
 
+		/****************************************************************************/
+	
 	</script>
 </body>
 </html>

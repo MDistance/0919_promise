@@ -8,7 +8,7 @@
 </head>
 <body>
   <!-- 
-    3.改变promise状态和指定回调函数谁先谁后?
+    3.改变Promise实例状态和指定回调函数谁先谁后?
       (1)都有可能, 正常情况下是先指定回调再改变状态, 但也可以先改状态再指定回调
       (2)如何先改状态再指定回调?
         ①在执行器中直接调用resolve()/reject()
@@ -16,6 +16,36 @@
       (3)什么时候才能得到数据?
         ①如果先指定的回调, 那当状态发生改变时, 回调函数就会调用, 得到数据
         ②如果先改变的状态, 那当指定回调时, 回调函数就会调用, 得到数据
-  -->
+	-->
+	
+	<script type="text/javascript" >
+
+		//演示：先指定回调，后改变状态-------先把成功和失败的回调保存起来，等状态变化的一瞬间，去调用响应的回调
+		const p1 = new Promise((resolve, reject) => { 
+			setTimeout(() => {
+				reject('atguigu');
+			},4000);
+		});
+
+		p1.then( 
+			value => {console.log('成功的回调',value)},
+			reason => {console.log('失败的回调',reason)}
+		);
+
+		//演示：先改变状态，后指定回调，先把状态、和状态对应的值存起来，等待指定回调，若指定了，瞬间就去异步调用回调函数
+		const p1 = new Promise((resolve, reject) => { 
+			setTimeout(() => {
+				reject('atguigu');
+			},1000);
+		});
+
+		setTimeout(()=>{
+			p1.then( 
+				value => {console.log('成功的回调',value)},
+				reason => {console.log('失败的回调',reason)}
+			);
+		},3000)
+
+	</script>
 </body>
 </html>

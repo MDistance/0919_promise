@@ -8,13 +8,37 @@
 </head>
 <body>
   <!-- 
-    1.	如何改变promise的状态?
+    1.	如何改变一个Promise实例的状态?
       (1)resolve(value): 如果当前是pendding就会变为resolved
       (2)reject(reason): 如果当前是pendding就会变为rejected
-      (3)抛出异常: 如果当前是pendding就会变为rejected
+      (3)执行器函数(excutor)抛出异常: 如果当前是pendding就会变为rejected
     
-    2.	一个promise指定多个成功/失败回调函数, 都会调用吗?
-      当promise改变为对应状态时都会调用
-  -->
+    2.	一个promise指定多个成功/失败回调函数, 都会调用吗? --- 会
+	-->
+	
+	<script type="text/javascript" >
+	
+		let p1 = new Promise((resolve,reject)=>{
+			//throw(new Error('我是错误的原因'))
+			//console.log(a);
+			setTimeout(()=>{
+				resolve('成功的数据')
+			},1000)
+		})
+
+		p1.then(
+			value => console.log('成功的回调1',value),
+			reason => console.log('失败的回调1',reason),
+		)
+		p1.then(
+			value => console.log('成功的回调2',value),
+			reason => console.log('失败的回调2',reason),
+		)
+		p1.then(
+			value => console.log('成功的回调3',value),
+			reason => console.log('失败的回调3',reason),
+		)
+
+	</script>
 </body>
 </html>
