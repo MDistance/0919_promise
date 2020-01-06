@@ -33,7 +33,6 @@
 	//TypeError
 	/* let obj = {}
 	obj() */
-
 	/* let arr = [{name:'kobe',age:18},{name:'wade',age:19}]
 	let result = arr.find((item)=>{
 		return item.age > 19
@@ -52,11 +51,44 @@
 	/* function demo(params) {
 		function test(params) {
 			return ()=>{
-			
 	}
 	demo() */
 
+	//捕获错误
+	/* 
+			把可能出现错误的代码，写在try中：
+				（1）若没有错误，正常执行。
+				（2）若有错误，会携带错误的原因，来到catch中。
+	 */
+	/* try{
+		let arr = [{name:'kobe',age:18},{name:'wade',age:19}]
+		let result = arr.find((item)=>{
+			return item.age > 19
+		})
+		console.log(result.name); //该行代码之行时，可能由js引擎抛出ReferenceError错误
+	}
+	catch(err){
+		console.log('出错了',err);
+	} 
+	console.log(1); */
 
+
+	//抛出错误
+	function doSomeThing() {
+		let time = Date.now()
+		if(time % 2 === 1){
+			console.log('时间是奇数,可以干活',time);
+		}else{
+			//console.log('时间是偶数,不能干活',time);
+			throw(new Error('时间是偶数,不能干活'))
+		}
+	}
+
+	try {
+		doSomeThing()
+	} catch (error) {
+		console.log(error);
+	}
 
 </script>
 </body>

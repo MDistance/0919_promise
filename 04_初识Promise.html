@@ -17,21 +17,23 @@
   -->
 <script type="text/javascript">
 
-  var promise1 = new Promise(function(resolve, reject) { //执行器函数(excutor),它是同步的回调
-    //当我们new了一个Promise实例后，实例自身的状态是：初始化状态(pending)
-    //执行器函数中，写异步代码
-    setTimeout(function() {
-      //resolve('foo'); //调用resolve，可以将Promise实例对象由 初始化状态(pending) 变为 成功状态(resolved)，同时指定成功的value
-      reject('失败了') //调用reject，可以将Promise实例对象由 初始化状态(pending) 变为 失败状态(rejected)，同时指定失败的reason
-    },1000);
-  });
+//Promise不是回调函数，但是new Promise时传递进去的函数是回调函数，它是同步的回调
+const p1 = new Promise((resolve, reject) => { //Promise的执行器函数(excutor),是同步的回调函数
+	console.log('new Promise传递进去的回调函数');
+	//在执行器函数中，开启异步任务
+  setTimeout(() => {
+    resolve('foo');
+  },1000);
+});
 
-  promise1.then(
-    value => console.log(value), //Promise实例成功状态所对相应的回调函数，它是异步的回调
-    reason => console.log(reason), //Promise实例成功状态所对相应的回调函数，它是异步的回调
-  );
+p1.then(function(value) { //p1调用了，Promise原型对象上的then方法
+  console.log(value);
+});
 
-  console.log(promise1);
+//console.log(promise1);
+
+
+a.b()
 
 
 </script>
