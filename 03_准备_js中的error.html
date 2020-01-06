@@ -17,7 +17,7 @@
         Error: 所有错误的父类型
         ReferenceError: 引用的变量不存在
         TypeError: 数据类型不正确的错误
-        RangeError: 数据值不在其所允许的范围内
+        RangeError: 数据值不在其所允许的范围内---递归
         SyntaxError: 语法错误
     2. 错误处理
         捕获错误: try ... catch
@@ -27,35 +27,35 @@
         stack属性: 函数调用栈记录信息
   */
 
-  //处理js引擎抛出的错误
-  /*let arr = [{name:'kobe',age:18},{name:'wade',age:19}]
-  let result = arr.find((item)=>{
-    return item.age > 100
-  })
+	//ReferenceError
+	//console.log(a);
 
-  try{
-    console.log(result.name)
-  }catch(err){
-    console.log(err)
-  }
-  console.log(1)*/
+	//TypeError
+	/* let obj = {}
+	obj() */
 
-  //自己抛出错误，并处理
-  function doSomeThings() {
-    let time = Date.now()
-    if(time%2 === 1) {
-      console.log('奇数，能执行程序')
-    } else{
-      throw new Error('偶数，不能执行程序')
-    }
-  }
+	/* let arr = [{name:'kobe',age:18},{name:'wade',age:19}]
+	let result = arr.find((item)=>{
+		return item.age > 19
+	})
+	console.log(result.name); */
 
-  try{
-    doSomeThings()
-  }catch(err){
-    debugger
-    console.log('出错',err)
-  }
+
+	//RangeError
+	/* function demo() {
+		console.log('demo');
+		demo()
+	}
+	demo() */
+
+	//SyntaxError
+	/* function demo(params) {
+		function test(params) {
+			return ()=>{
+			
+	}
+	demo() */
+
 
 
 </script>
