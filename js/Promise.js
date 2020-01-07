@@ -63,22 +63,87 @@
 	*/
 	Promise.prototype.then = function(onResolved,onRejected){
 		const self = this
-		//1.如果调用then的时候，Promise实例状态为resolved，去执行onResolved回调。
-		if(self.status === RESOLVED){
-			setTimeout(()=>{
-				onResolved(self.data)
-			})
-		}
-		//2.如果调用then的时候，Promise实例状态为rejected，去执行onRejected回调。
-		else if(self.status === REJECTED){
-			setTimeout(()=>{
-				onRejected(self.data)
-			})
-		}
-		//3.如果调用then的时候，Promise实例状态为pending，不去执行回调，去将onResolved和onRejected保存起来 
-		else{
-			self.callbacks.push({onResolved,onRejected})
-		}
+		return new Promise((resolve,reject)=>{
+			//1.如果调用then的时候，Promise实例状态为resolved，去执行onResolved回调。
+			if(self.status === RESOLVED){
+				setTimeout(()=>{
+					try {
+						let result = onResolved(self.data)
+						if(!(result instanceof Promise)){
+							//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
+							resolve(result)
+						}else{
+							//进入此else，意味着：onResolved的返回值是一个Promise实例
+							result.then(
+								value => resolve(value),
+								reason => reject(reason)
+							)
+						}
+					} catch (error) {
+						reject(error)
+					}
+				})
+			}
+			//2.如果调用then的时候，Promise实例状态为rejected，去执行onRejected回调。
+			else if(self.status === REJECTED){
+				setTimeout(()=>{
+					try {
+						let result = onRejected(self.data)
+						if(!(result instanceof Promise)){
+							//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
+							resolve(result)
+						}else{
+							//进入此else，意味着：onResolved的返回值是一个Promise实例
+							result.then(
+								value => resolve(value),
+								reason => reject(reason)
+							)
+						}
+					} catch (error) {
+						reject(error)
+					}
+				})
+			}
+			//3.如果调用then的时候，Promise实例状态为pending，不去执行回调，去将onResolved和onRejected保存起来 
+			else{
+				self.callbacks.push({
+					onResolved:function(){
+						try {
+							let result = onResolved(self.data)
+							if(!(result instanceof Promise)){
+								//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
+								resolve(result)
+							}else{
+								//进入此else，意味着：onResolved的返回值是一个Promise实例
+								result.then(
+									value => resolve(value),
+									reason => reject(reason)
+								)
+							}
+						} catch (error) {
+							reject(error)
+						}
+					},
+					onRejected:function(){
+						try {
+							let result = onRejected(self.data)
+							if(!(result instanceof Promise)){
+								//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
+								resolve(result)
+							}else{
+								//进入此else，意味着：onResolved的返回值是一个Promise实例
+								result.then(
+									value => resolve(value),
+									reason => reject(reason)
+								)
+							}
+						} catch (error) {
+							reject(error)
+						}
+					}
+				})
+			}
+		})
 	}
 
 //替换掉window上的Promise

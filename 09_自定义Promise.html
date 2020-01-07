@@ -11,14 +11,16 @@
 
 let p1 = new Promise((resolve,reject)=>{
 	setTimeout(()=>{
-		resolve(1)
+		resolve('数据')
 	},1000)
 })
 
-	p1.then(
-		value => console.log('成功1',value),
-		reason => console.log('失败1',reason)
-	)
+p1.then(
+	value => console.log('成功1',value),
+	reason => console.log('失败1',reason)
+).then(
+	value => console.log('成功2',value),
+)
 
 </script>
 </body>
