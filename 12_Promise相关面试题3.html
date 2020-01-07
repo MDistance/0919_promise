@@ -7,11 +7,6 @@
 <body>
 
     <script>
-      // 3 7 4 1 2 5
-      /* 
-      宏: []
-      微: []
-      */
       const first = () => (new Promise((resolve, reject) => {
         console.log(3)
         let p = new Promise((resolve, reject) => {
@@ -26,7 +21,6 @@
         p.then((arg) => {
           console.log(arg)
         })
-    
       }))
     
       first().then((arg) => {
