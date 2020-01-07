@@ -15,17 +15,10 @@ let p1 = new Promise((resolve,reject)=>{
 	},1000)
 })
 
-setTimeout(()=>{
 	p1.then(
-	value => console.log('成功1',value),
-	reason => console.log('失败1',reason)
+		value => console.log('成功1',value),
+		reason => console.log('失败1',reason)
 	)
-	p1.then(
-		value => console.log('成功2',value),
-		reason => console.log('失败2',reason)
-	)
-},3000)
-console.log('主线程');
 
 </script>
 </body>

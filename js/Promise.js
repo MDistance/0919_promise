@@ -50,10 +50,35 @@
 		excutor(resolve,reject)
 	}
 
+	/* 
+		 一、then做什么？
+					1.如果调用then的时候，Promise实例状态为resolved，去执行onResolved回调。
+					2.如果调用then的时候，Promise实例状态为rejected，去执行onRejected回调。
+					3.如果调用then的时候，Promise实例状态为pending，不去执行回调，去将onResolved和onRejected保存起来 
+		 二、then的返回值是什么？
+					返回的是Promise的实例对象，返回的这个Promise实例对象的状态、数据如何确定？
+						1.如果then所指定的回调执行是抛出了异常，then返回的那个Promise实例状态为：rejected，reason是该异常
+						2.如果then所指定的回调返回值是一个非Promise类型，then返回的那个Promise实例状态为：resolved，value是该返回值
+						3.如果then所指定的回调返回值是一个Promise实例，then返回的那个Promise实例状态、数据与之一致。
+	*/
 	Promise.prototype.then = function(onResolved,onRejected){
 		const self = this
-		//存onResolved,onRejected两个回调
-		self.callbacks.push({onResolved,onRejected})
+		//1.如果调用then的时候，Promise实例状态为resolved，去执行onResolved回调。
+		if(self.status === RESOLVED){
+			setTimeout(()=>{
+				onResolved(self.data)
+			})
+		}
+		//2.如果调用then的时候，Promise实例状态为rejected，去执行onRejected回调。
+		else if(self.status === REJECTED){
+			setTimeout(()=>{
+				onRejected(self.data)
+			})
+		}
+		//3.如果调用then的时候，Promise实例状态为pending，不去执行回调，去将onResolved和onRejected保存起来 
+		else{
+			self.callbacks.push({onResolved,onRejected})
+		}
 	}
 
 //替换掉window上的Promise

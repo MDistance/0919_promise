@@ -19,7 +19,7 @@
 			value => console.log('成功1',value),
 			//reason => {throw reason} //then不指定失败的回调，相当与写了该行代码
 		).catch(
-			//value => {return value},
+			//value => {return 100},
 			reason => console.log('失败2',reason)
 		).then(
 			value => console.log('成功3',value)
