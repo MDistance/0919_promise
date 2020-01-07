@@ -21,6 +21,7 @@
 
 		//调用resolve会：1.内部状态改为resolved，2.保存成功的value，3.去callbacks中取出所有的onResolved依次异步调用
 		function resolve(value){
+			if(self.status !== PENDING) return
 			//1.内部状态改为resolved
 			self.status = RESOLVED
 			//2.保存成功的value
@@ -35,6 +36,7 @@
 
 		//调用reject会：1.内部状态改为rejected，2.保存失败的reason，3.去callbacks中取出所有的onRejected依次异步调用
 		function reject(reason){
+			if(self.status !== PENDING) return
 			//1.内部状态改为rejected
 			self.status = REJECTED
 			//2.保存失败的reason
@@ -61,87 +63,71 @@
 						2.如果then所指定的回调返回值是一个非Promise类型，then返回的那个Promise实例状态为：resolved，value是该返回值
 						3.如果then所指定的回调返回值是一个Promise实例，then返回的那个Promise实例状态、数据与之一致。
 	*/
+
 	Promise.prototype.then = function(onResolved,onRejected){
 		const self = this
+		//下面这行代码，作用是：将错误的reason一层一层抛出
+		onRejected = typeof onRejected === 'function' ? onRejected : reason => {throw(reason)}
+		//下面这行代码，作用是：让catch具有传递功能
+		onResolved = typeof onResolved === 'function' ? onResolved : value => value
 		return new Promise((resolve,reject)=>{
+			//专门用于执行onResolved,onRejected
+			function handle (callback){
+				try {
+					let result = callback(self.data)
+					if(!(result instanceof Promise)){
+						//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
+						resolve(result)
+					}else{
+						//进入此else，意味着：onResolved的返回值是一个Promise实例
+						result.then(
+							value => resolve(value),
+							reason => reject(reason)
+						)
+					}
+				} catch (error) {
+					reject(error)
+				}
+			}
 			//1.如果调用then的时候，Promise实例状态为resolved，去执行onResolved回调。
 			if(self.status === RESOLVED){
 				setTimeout(()=>{
-					try {
-						let result = onResolved(self.data)
-						if(!(result instanceof Promise)){
-							//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
-							resolve(result)
-						}else{
-							//进入此else，意味着：onResolved的返回值是一个Promise实例
-							result.then(
-								value => resolve(value),
-								reason => reject(reason)
-							)
-						}
-					} catch (error) {
-						reject(error)
-					}
+					handle(onResolved)
 				})
 			}
 			//2.如果调用then的时候，Promise实例状态为rejected，去执行onRejected回调。
 			else if(self.status === REJECTED){
 				setTimeout(()=>{
-					try {
-						let result = onRejected(self.data)
-						if(!(result instanceof Promise)){
-							//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
-							resolve(result)
-						}else{
-							//进入此else，意味着：onResolved的返回值是一个Promise实例
-							result.then(
-								value => resolve(value),
-								reason => reject(reason)
-							)
-						}
-					} catch (error) {
-						reject(error)
-					}
+					handle(onRejected)
 				})
 			}
 			//3.如果调用then的时候，Promise实例状态为pending，不去执行回调，去将onResolved和onRejected保存起来 
 			else{
 				self.callbacks.push({
 					onResolved:function(){
-						try {
-							let result = onResolved(self.data)
-							if(!(result instanceof Promise)){
-								//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
-								resolve(result)
-							}else{
-								//进入此else，意味着：onResolved的返回值是一个Promise实例
-								result.then(
-									value => resolve(value),
-									reason => reject(reason)
-								)
-							}
-						} catch (error) {
-							reject(error)
-						}
+						handle(onResolved)
 					},
 					onRejected:function(){
-						try {
-							let result = onRejected(self.data)
-							if(!(result instanceof Promise)){
-								//进入此判断，意味着：onResolved的返回值是一个，非Promise实例
-								resolve(result)
-							}else{
-								//进入此else，意味着：onResolved的返回值是一个Promise实例
-								result.then(
-									value => resolve(value),
-									reason => reject(reason)
-								)
-							}
-						} catch (error) {
-							reject(error)
-						}
+						handle(onRejected)
 					}
 				})
+			}
+		})
+	}
+
+	Promise.prototype.catch = function(onRejected){
+		return this.then(undefined,onRejected)
+	}
+
+	Promise.resolve = function(value){
+		return new Promise((resolve,reject)=>{
+			if(value instanceof Promise){
+				value.then(
+					val => resolve(val),
+					reason => reject(reason)
+				)
+			}else{
+				resolve(value)
 			}
 		})
 	}

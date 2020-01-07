@@ -66,16 +66,17 @@
 		/* let p1 = new Promise((resolve,reject)=>{
 			resolve(1)
 		}) */
-		/* let p1 = Promise.resolve(1) //用于快速创建一个状态为resolved的Promise实例，同时指定value
-		let p2 = Promise.reject(2) //用于快速创建一个状态为rejected的Promise实例，同时指定reason
-		p2.catch(
-			reason => console.log(reason)
-		) */
+		let p1 = Promise.resolve(Promise.resolve(100)) //用于快速创建一个状态为resolved的Promise实例，同时指定value
+		//let p2 = Promise.reject(2) //用于快速创建一个状态为rejected的Promise实例，同时指定reason
+		p1.then(
+			value => console.log('成功的回调',value),
+			reason => console.log('失败的回调',reason),
+		)
 
 		/****************************************************************************/
 
 		//准备一些Promise实例，供测试使用
-		let p1 = new Promise((resolve,reject)=>{
+		/* let p1 = new Promise((resolve,reject)=>{
 			setTimeout(()=>{
 				resolve('p1成功了')
 			},1000)
@@ -86,7 +87,7 @@
 			},7000)
 		})
 		let p3 = Promise.reject('p3失败了')
-		let p4 = Promise.reject('p4失败了')
+		let p4 = Promise.reject('p4失败了') */
 
 		//Promise.all方法
 		/* Promise.all([p1,p2,p3,p4]).then(
