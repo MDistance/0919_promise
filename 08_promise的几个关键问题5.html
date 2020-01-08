@@ -27,6 +27,7 @@
 				console.log('异步任务1成功了，带回来的数据是:',value);
 				return value
 			},
+			reason => {throw reason}
 		)
 		.then(
 			value => {

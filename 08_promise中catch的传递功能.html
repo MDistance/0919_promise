@@ -22,7 +22,7 @@
 			},
 			//reason => {throw reason} //then如果不指定失败的回调，相当与写了该行代码
 		).catch(
-			//value => {return 700}, //程序员不需要写改行代码，由底层自动加上,写了也是无效代码
+			//value => {return value}, //程序员不需要写改行代码，由底层自动加上,写了也是无效代码
 			reason => console.log('失败2',reason)
 		).then(
 			value => console.log('成功3',value)

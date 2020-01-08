@@ -131,7 +131,67 @@
 			}
 		})
 	}
+	
+	Promise.reject = function(reason){
+		return new Promise((resolve,reject)=>{
+			reject(reason)
+		})
+	}
 
-//替换掉window上的Promise
-window.Promise = Promise
+	Promise.all = function(promiseArr){
+		return new Promise((resolve,reject)=>{
+			let resolvedCount = 0
+			let values = []
+			promiseArr.forEach((promise,index)=>{
+				promise.then(
+					value => {
+						resolvedCount++
+						values[index] = value
+						if(resolvedCount === promiseArr.length){
+							resolve(values)
+						}
+					},
+					reason => reject(reason)
+				)
+			})
+		})
+	}
+
+	Promise.race = function(promiseArr){
+		return new Promise((resolve,reject)=>{
+			promiseArr.forEach((promise)=>{
+				promise.then(
+					value => resolve(value),
+					reason => reject(reason)
+				)
+			})
+		})
+	}
+
+	Promise.resolveDelay = function(value,time){
+		return new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				if(value instanceof Promise){
+					value.then(
+						val => resolve(val),
+						reason => reject(reason)
+					)
+				}else{
+					resolve(value)
+				}
+			},time)
+		})
+	}
+
+	Promise.rejectDelay = function(reason,time){
+		return new Promise((resolve,reject)=>{
+			setTimeout(()=>{
+				reject(reason)
+			},time)
+		})
+	}
+
+
+	//替换掉window上的Promise
+	window.Promise = Promise
 })()

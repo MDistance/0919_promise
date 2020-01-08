@@ -66,12 +66,17 @@
 		/* let p1 = new Promise((resolve,reject)=>{
 			resolve(1)
 		}) */
-		let p1 = Promise.resolve(Promise.resolve(100)) //用于快速创建一个状态为resolved的Promise实例，同时指定value
+		/* let p1 = Promise.resolve(Promise.reject(100)) //用于快速创建一个状态为resolved的Promise实例，同时指定value
 		//let p2 = Promise.reject(2) //用于快速创建一个状态为rejected的Promise实例，同时指定reason
 		p1.then(
 			value => console.log('成功的回调',value),
 			reason => console.log('失败的回调',reason),
-		)
+		) */
+		/* let p1 = Promise.reject(Promise.resolve(900))
+		p1.then(
+			value => console.log('成功的回调',value),
+			reason => console.log('失败的回调',reason),
+		) */
 
 		/****************************************************************************/
 
@@ -79,7 +84,7 @@
 		/* let p1 = new Promise((resolve,reject)=>{
 			setTimeout(()=>{
 				resolve('p1成功了')
-			},1000)
+			},9000)
 		})
 		let p2 = new Promise((resolve,reject)=>{
 			setTimeout(()=>{
@@ -87,10 +92,10 @@
 			},7000)
 		})
 		let p3 = Promise.reject('p3失败了')
-		let p4 = Promise.reject('p4失败了') */
+		let p4 = Promise.reject('p4失败了')
 
 		//Promise.all方法
-		/* Promise.all([p1,p2,p3,p4]).then(
+		Promise.all([p1,p2,p3,p4]).then(
 			value => console.log('all方法返回的新Promise实例成功了',value),
 			reason => console.log('all方法返回的新Promise实例失败了',reason)
 		) */
@@ -102,7 +107,7 @@
 		) */
 
 		/****************************************************************************/
-	
+
 	</script>
 </body>
 </html>
