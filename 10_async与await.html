@@ -43,6 +43,9 @@
 		reason => console.log('失败的回调',reason)
 	) */
 
+	/* *************************************************************** */
+
+	//返回一个Promsise实例的test1函数
 	function test1 (){
 		return new Promise((resolve,reject)=>{
 			setTimeout(()=>{
@@ -50,7 +53,7 @@
 			},2000)
 		})
 	}
-
+	//返回一个Promsise实例的test2函数
 	function test2 (){
 		return new Promise((resolve,reject)=>{
 			setTimeout(()=>{
